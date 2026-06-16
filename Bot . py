@@ -1,0 +1,25 @@
+import os
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
+
+TOKEN = os.environ.get("8880928609:AAE9BCal4e3U571edbypsvHTjSsJI4WRccc")
+YOUR_CHAT_ID = int(os.environ.get("8549908071"))
+
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Hiiiii 😆🎀")
+
+async def auto_reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_name = update.message.from_user.first_name
+    user_message = update.message.text
+    await context.bot.send_message(
+        chat_id=YOUR_CHAT_ID,
+        text=f"📩 رسالة من {user_name}:\n{user_message}"
+    )
+    await update.message.reply_text(
+        f"مرحباً {user_name}! 👋\nتم استلام رسالتك ✅\nسأرد عليك في أقرب وقت ممكن 😊"
+    )
+
+app = ApplicationBuilder().token(8880928609:AAE9BCal4e3U571edbypsvHTjSsJI4WRccc).build()
+app.add_handler(CommandHandler("start", start))
+app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, auto_reply))
+app.run_polling()
